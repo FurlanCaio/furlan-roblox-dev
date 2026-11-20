@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Furlan | Roblox Developer & Luau Scripter</title>
+<meta name="description" content="Roblox developer and Luau scripter. Server-authoritative game systems, clean UI and exploit-resistant economies. Portfolio: Sword Ascension.">
+<meta property="og:title" content="Furlan | Roblox Developer & Luau Scripter">
+<meta property="og:description" content="Full game systems in Luau: combat, economy, data saving, UI and anti-exploit. See Sword Ascension.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0816;
+    --bg-2: #130d24;
+    --panel: #1b1333;
+    --panel-2: #241a44;
+    --line: rgba(170, 70, 255, 0.28);
+    --purple: #aa46ff;
+    --cyan: #3ce6ff;
+    --magenta: #ff3cc8;
+    --gold: #ffc832;
+    --green: #46ff8c;
+    --red: #ff3c50;
+    --text: #f5f0ff;
+    --sub: #d2caee;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, .display { font-family: "Rajdhani", "Inter", sans-serif; letter-spacing: 0.02em; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+
+  /* Background glow */
+  .glow { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(600px 400px at 85% -5%, rgba(170, 70, 255, 0.28), transparent 70%),
+      radial-gradient(500px 380px at 5% 30%, rgba(60, 230, 255, 0.12), transparent 70%),
+      radial-gradient(600px 400px at 50% 110%, rgba(255, 60, 200, 0.14), transparent 70%); }
+  main, header, footer { position: relative; z-index: 1; }
+
+  /* Nav */
+  nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px);
+    background: rgba(12, 8, 22, 0.72); border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font-size: 1.5rem; font-weight: 700; }
+  .logo span { color: var(--cyan); }
+  nav ul { display: flex; gap: 26px; list-style: none; font-size: 0.95rem; color: var(--sub); }
+  nav ul a:hover { color: var(--cyan); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 14px;
+    font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.04em;
+    border: 2px solid transparent; transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: linear-gradient(135deg, var(--purple), var(--magenta)); color: #fff;
+    box-shadow: 0 6px 28px rgba(170, 70, 255, 0.45); }
+  .btn-ghost { border-color: var(--cyan); color: var(--cyan); background: rgba(60, 230, 255, 0.06); }
+  .btn-ghost:hover { box-shadow: 0 0 24px rgba(60, 230, 255, 0.35); }
+
+  /* Hero */
+  .hero { padding: 96px 0 72px; text-align: center; }
+  .tag { display: inline-block; padding: 6px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
+    color: var(--cyan); background: rgba(60, 230, 255, 0.08); border: 1px solid rgba(60, 230, 255, 0.35); margin-bottom: 22px; }
+  .hero h1 { font-size: clamp(2.6rem, 7vw, 5rem); line-height: 1.02; font-weight: 700; }
+  .grad { background: linear-gradient(90deg, var(--cyan), var(--purple) 55%, var(--magenta));
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.lead { max-width: 640px; margin: 22px auto 34px; color: var(--sub); font-size: 1.12rem; }
+  .cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 60px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 10px; }
+  .stat b { display: block; font-family: "Rajdhani", sans-serif; font-size: 2.3rem; color: var(--gold); line-height: 1.1; }
+  .stat span { font-size: 0.88rem; color: var(--sub); }
+
+  /* Sections */
+  section { padding: 72px 0; }
+  .eyebrow { color: var(--magenta); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  h2 { font-size: clamp(2rem, 4.5vw, 3rem); margin: 6px 0 14px; line-height: 1.1; }
+  .section-lead { color: var(--sub); max-width: 640px; margin-bottom: 38px; }
+
+  .grid { display: grid; gap: 18px; }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g2 { grid-template-columns: repeat(2, 1fr); }
+  .card { background: linear-gradient(180deg, var(--panel-2), var(--panel)); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 26px; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; }
+  .card:hover { transform: translateY(-4px); border-color: var(--cyan); box-shadow: 0 10px 34px rgba(60, 230, 255, 0.12); }
+  .card .ico { font-size: 1.9rem; margin-bottom: 10px; }
+  .card h3 { font-size: 1.4rem; margin-bottom: 6px; }
+  .card p { color: var(--sub); font-size: 0.96rem; }
+
+  /* Video */
+  .video { position: relative; aspect-ratio: 16 / 9; border-radius: 22px; overflow: hidden; background: var(--panel);
+    border: 2px solid var(--purple); box-shadow: 0 0 60px rgba(170, 70, 255, 0.35); }
+  .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .video .empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 20px; color: var(--sub); }
+  .video-row { display: flex; gap: 14px; margin-top: 18px; flex-wrap: wrap; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .chip { padding: 7px 14px; border-radius: 999px; font-size: 0.88rem; font-weight: 500;
+    background: rgba(170, 70, 255, 0.14); border: 1px solid var(--line); color: var(--text); }
+
+  .feature { display: flex; gap: 14px; align-items: flex-start; }
+  .feature .dot { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+    background: rgba(70, 255, 140, 0.12); color: var(--green); font-weight: 700; }
+  .feature h3 { font-size: 1.2rem; }
+  .feature p { color: var(--sub); font-size: 0.94rem; }
+
+  /* Process */
+  .steps { counter-reset: s; }
+  .step { position: relative; padding-left: 62px; }
+  .step::before { counter-increment: s; content: counter(s); position: absolute; left: 0; top: 0;
+    width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+    font-family: "Rajdhani", sans-serif; font-weight: 700; font-size: 1.4rem; color: #1b1333;
+    background: linear-gradient(135deg, var(--gold), #ff9a3c); }
+
+  /* Contact */
+  .contact { text-align: center; background: linear-gradient(135deg, rgba(170, 70, 255, 0.22), rgba(255, 60, 200, 0.12));
+    border: 1px solid var(--line); border-radius: 28px; padding: 60px 24px; }
+  .contact .cta { margin-top: 26px; }
+  footer { padding: 36px 0 50px; text-align: center; color: var(--sub); font-size: 0.88rem; }
+
+  @media (max-width: 860px) {
+    nav ul { display: none; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .g3, .g2 { grid-template-columns: 1fr; }
+    .hero { padding-top: 64px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .card, .btn { transition: none; } }
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+
+<nav>
+  <div class="wrap">
+    <a href="#top" class="logo display"><span>&lt;/&gt;</span> <span data-cfg="name" style="color:var(--text)">Furlan</span></a>
+    <ul>
+      <li><a href="#project">Project</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#how">How I work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn btn-primary" style="padding:8px 18px;font-size:1rem">Hire me</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="tag">Open for freelance work</span>
+    <h1>Roblox Developer &<br><span class="grad">Luau Scripter</span></h1>
+    <p class="lead">I build complete, secure game systems: combat, economy, data saving and clean UI. Everything validated on the server, easy to balance and easy to expand.</p>
+    <div class="cta">
+      <a href="#project" class="btn btn-primary">Watch the showcase</a>
+      <a href="#contact" class="btn btn-ghost">Let's talk</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>10</b><span>Stages with guardians</span></div>
+      <div class="stat"><b>14</b><span>Server services</span></div>
+      <div class="stat"><b>100%</b><span>Server-authoritative economy</span></div>
+      <div class="stat"><b>PC + Mobile</b><span>Responsive UI by code</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="project">
+    <div class="wrap">
+      <div class="eyebrow">Featured project</div>
+      <h2>Sword Ascension: <span class="grad">+1 Blade Simulator</span></h2>
+      <p class="section-lead">An anime dark-fantasy clicker built end to end by me: gameplay, systems, UI, saving and anti-exploit. Here is the full walkthrough.</p>
+
+      <div class="video" id="videoBox">
+        <div class="empty">Add your YouTube video ID in the CONFIG block at the bottom of this file.</div>
+      </div>
+      <div class="video-row">
+        <a class="btn btn-primary" data-cfg-href="videoLong" href="#" target="_blank" rel="noopener">Full walkthrough (2:34)</a>
+        <a class="btn btn-ghost" data-cfg-href="videoShort" href="#" target="_blank" rel="noopener">Quick showcase (1 min)</a>
+        <a class="btn btn-ghost" data-cfg-href="repo" href="#" target="_blank" rel="noopener">View code on GitHub</a>
+      </div>
+      <div class="chips">
+        <span class="chip">Luau --!strict</span><span class="chip">Rojo</span><span class="chip">Selene + StyLua</span>
+        <span class="chip">DataStore + session lock</span><span class="chip">RemoteEvents + validators</span><span class="chip">Procedural map &amp; UI</span>
+      </div>
+
+      <div class="grid g3" style="margin-top:44px">
+        <div class="card"><div class="ico">⚔️</div><h3>Combat that feels good</h3><p>Click to strike, skills on Q/E, area damage, floating numbers, screen shake and VFX shared with every player.</p></div>
+        <div class="card"><div class="ico">👹</div><h3>Mobs that hunt you</h3><p>Enemies are simulated on the server: they chase, surround and strike you. A guardian waits at the end of every few stages.</p></div>
+        <div class="card"><div class="ico">🌍</div><h3>Global boss raid</h3><p>A multiplayer boss every 3 minutes with a shared HP bar, damage ranking, rare titles and a permanent shop.</p></div>
+        <div class="card"><div class="ico">🥚</div><h3>Pets &amp; gacha</h3><p>Three eggs, twelve pets, rarity tiers, slots and equip-best logic with a satisfying opening animation.</p></div>
+        <div class="card"><div class="ico">🔁</div><h3>Rebirth &amp; progression</h3><p>Sword unlocks, gym zones, daily and weekly missions, a 7-day reward calendar and codes, all tuned from one config.</p></div>
+        <div class="card"><div class="ico">💨</div><h3>Movement</h3><p>A Blox Fruits style dash on R, with a touch button on mobile and gamepad support.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="eyebrow">Services</div>
+      <h2>What I can build for <span class="grad">your game</span></h2>
+      <p class="section-lead">From a single system to a full game loop. I write readable code your team can keep expanding.</p>
+      <div class="grid g3">
+        <div class="card"><div class="ico">🧠</div><h3>Gameplay systems</h3><p>Combat, abilities, enemies and AI, bosses, quests, pets, inventories and progression loops.</p></div>
+        <div class="card"><div class="ico">💰</div><h3>Economy &amp; data</h3><p>Currencies, shops, gamepasses, codes and safe DataStore saving with versioned migrations.</p></div>
+        <div class="card"><div class="ico">🛡️</div><h3>Anti-exploit</h3><p>Server authority, input validation, rate limiting and secure remotes so your economy cannot be cheated.</p></div>
+        <div class="card"><div class="ico">🎨</div><h3>UI &amp; UX in code</h3><p>Scalable interfaces for PC and mobile, animated panels, HUDs and feedback that make a game feel polished.</p></div>
+        <div class="card"><div class="ico">✨</div><h3>Game feel &amp; VFX</h3><p>Tweens, particles, camera shake, hit feedback and sound hooks that give every action impact.</p></div>
+        <div class="card"><div class="ico">🔧</div><h3>Fixes &amp; refactors</h3><p>Bug hunts, performance passes and cleanup of existing codebases, with clear documentation.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quality">
+    <div class="wrap">
+      <div class="eyebrow">Under the hood</div>
+      <h2>Code built to <span class="grad">last</span></h2>
+      <p class="section-lead">The showcase is polished on the surface, and clean underneath.</p>
+      <div class="grid g2">
+        <div class="feature"><div class="dot">✓</div><div><h3>Server-authoritative</h3><p>The client only sends intentions. Damage, drops, rebirths, purchases and codes are all decided on the server.</p></div></div>
+        <div class="feature"><div class="dot">✓</div><div><h3>One config to balance</h3><p>Every number lives in a single Config module, so tuning the game never means hunting through scripts.</p></div></div>
+        <div class="feature"><div class="dot">✓</div><div><h3>Safe saving</h3><p>Session locking, schema reconcile and version migrations protect player data across updates.</p></div></div>
+        <div class="feature"><div class="dot">✓</div><div><h3>One service per system</h3><p>Clear boundaries, no yielding in hot loops, connections cleaned with Maids, and a code map for new contributors.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="eyebrow">How I work</div>
+      <h2>Simple, <span class="grad">clear process</span></h2>
+      <div class="grid g2 steps" style="margin-top:30px">
+        <div class="step"><h3>Brief</h3><p>You describe the idea. I ask the right questions and confirm scope, deadline and price.</p></div>
+        <div class="step"><h3>Build</h3><p>I deliver in small steps, with updates you can test in Studio along the way.</p></div>
+        <div class="step"><h3>Review</h3><p>Every change is linted, reviewed and checked for exploits before it reaches you.</p></div>
+        <div class="step"><h3>Handoff</h3><p>Clean code plus short docs, so you or your team can keep growing the game.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact">
+        <div class="eyebrow">Contact</div>
+        <h2>Have a game to <span class="grad">ship?</span></h2>
+        <p class="section-lead" style="margin-inline:auto">Tell me what you need and I will reply with a plan and a quote.</p>
+        <div class="cta">
+          <a class="btn btn-primary" data-cfg-href="discord" href="#" target="_blank" rel="noopener">Message on Discord</a>
+          <a class="btn btn-ghost" data-cfg-href="email" href="#">Send an email</a>
+          <a class="btn btn-ghost" data-cfg-href="roblox" href="#" target="_blank" rel="noopener">Roblox profile</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© <span id="year"></span> <span data-cfg="name">Furlan</span> · Roblox Developer &amp; Luau Scripter</div>
+</footer>
+
+<script>
+  /* ================= CONFIG: edit only this block ================= */
+  const CONFIG = {
+    name: "Furlan",
+    videoLongId: "",   // YouTube ID of the long video, e.g. "dQw4w9WgXcQ"
+    videoShortId: "",  // YouTube ID of the short video
+    repo: "",          // https://github.com/your-user/sword-ascension
+    discord: "",       // https://discord.com/users/YOUR_ID  (or your server invite)
+    email: "",         // you@example.com
+    roblox: ""         // https://www.roblox.com/users/YOUR_ID/profile
+  };
+  /* ================================================================= */
+
+  const yt = (id) => `https://www.youtube.com/watch?v=${id}`;
+  const links = {
+    videoLong: CONFIG.videoLongId ? yt(CONFIG.videoLongId) : "",
+    videoShort: CONFIG.videoShortId ? yt(CONFIG.videoShortId) : "",
+    repo: CONFIG.repo,
+    discord: CONFIG.discord,
+    email: CONFIG.email ? `mailto:${CONFIG.email}` : "",
+    roblox: CONFIG.roblox
+  };
+
+  document.querySelectorAll("[data-cfg]").forEach((el) => {
+    if (CONFIG[el.dataset.cfg]) el.textContent = CONFIG[el.dataset.cfg];
+  });
+  document.querySelectorAll("[data-cfg-href]").forEach((el) => {
+    const url = links[el.dataset.cfgHref];
+    if (url) el.href = url; else el.style.display = "none";
+  });
+
+  const mainId = CONFIG.videoShortId || CONFIG.videoLongId;
+  if (mainId) {
+    const box = document.getElementById("videoBox");
+    box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${mainId}" title="Sword Ascension showcase" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  }
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
