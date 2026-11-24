@@ -145,6 +145,7 @@
     <a href="#top" class="logo display"><span>&lt;/&gt;</span> <span data-cfg="name" style="color:var(--text)">Furlan</span></a>
     <ul>
       <li><a href="#project">Project</a></li>
+      <li><a href="#systems">Systems</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#how">How I work</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -182,6 +183,7 @@
         <div class="empty">Add your YouTube video ID in the CONFIG block at the bottom of this file.</div>
       </div>
       <div class="video-row">
+        <a class="btn btn-primary" data-cfg-href="game" href="#" target="_blank" rel="noopener">▶ Play on Roblox</a>
         <a class="btn btn-primary" data-cfg-href="videoLong" href="#" target="_blank" rel="noopener">Full walkthrough (2:34)</a>
         <a class="btn btn-ghost" data-cfg-href="videoShort" href="#" target="_blank" rel="noopener">Quick showcase (1 min)</a>
         <a class="btn btn-ghost" data-cfg-href="repo" href="#" target="_blank" rel="noopener">View code on GitHub</a>
@@ -199,6 +201,15 @@
         <div class="card"><div class="ico">🔁</div><h3>Rebirth &amp; progression</h3><p>Sword unlocks, gym zones, daily and weekly missions, a 7-day reward calendar and codes, all tuned from one config.</p></div>
         <div class="card"><div class="ico">💨</div><h3>Movement</h3><p>A Blox Fruits style dash on R, with a touch button on mobile and gamepad support.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section id="systems">
+    <div class="wrap">
+      <div class="eyebrow">Systems showcase</div>
+      <h2>One clip per <span class="grad">system</span></h2>
+      <p class="section-lead">Looking for something specific? Each clip shows a single system from Sword Ascension, scripted by me in Luau.</p>
+      <div class="grid g2" id="systemsGrid"></div>
     </div>
   </section>
 
@@ -274,7 +285,16 @@
     repo: "",          // https://github.com/your-user/sword-ascension
     discord: "https://discord.com/users/665873642839867403",
     email: "contato.cfurlan@gmail.com",
-    roblox: "https://www.roblox.com/users/8957535088/profile"
+    roblox: "https://www.roblox.com/users/8957535088/profile",
+    game: "https://www.roblox.com/games/114901688870709/Preview-Sword-Ascencion",
+    // One clip per system: { title, desc, id (YouTube ID) }
+    systems: [
+      { title: "Boss Enrage System", desc: "Below 50% HP the boss enters phase 2 with boosted stats.", id: "v0fHdaCmUnQ" },
+      { title: "Egg Hatching + Pet System", desc: "Eggs, rarity tiers, pet slots and equip-best logic.", id: "GVGgVMRhtIA" },
+      { title: "Sword Abilities", desc: "Blade Burst and Quick Slash on Q/E, validated on the server.", id: "pbfZag4O3Qg" },
+      { title: "Rebirth + Stage Progression", desc: "Rebirth multipliers and stages unlocking along the map.", id: "2ds9p70ZJzo" },
+      { title: "Boss Arena + Boss Shop", desc: "Timed global boss, damage ranking and a permanent shop.", id: "o0Wq51bs5XI" }
+    ]
   };
   /* ================================================================= */
 
@@ -285,7 +305,8 @@
     repo: CONFIG.repo,
     discord: CONFIG.discord,
     email: CONFIG.email ? `mailto:${CONFIG.email}` : "",
-    roblox: CONFIG.roblox
+    roblox: CONFIG.roblox,
+    game: CONFIG.game
   };
 
   document.querySelectorAll("[data-cfg]").forEach((el) => {
@@ -301,6 +322,18 @@
     const box = document.getElementById("videoBox");
     box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${mainId}" title="Sword Ascension showcase" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
   }
+  const grid = document.getElementById("systemsGrid");
+  (CONFIG.systems || []).forEach((s) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<div class="video" style="margin-bottom:16px"><iframe src="https://www.youtube-nocookie.com/embed/${s.id}" title="" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><h3></h3><p></p>`;
+    card.querySelector("iframe").title = s.title;
+    card.querySelector("h3").textContent = s.title;
+    card.querySelector("p").textContent = s.desc;
+    grid.appendChild(card);
+  });
+  if (!grid.children.length) document.getElementById("systems").style.display = "none";
+
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 </body>
